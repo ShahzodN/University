@@ -44,18 +44,21 @@ namespace UniversityT.Model
         {
             builder.HasKey(u => u.Id);
             builder.HasMany(u => u.Institutes).WithOne(i => i.University).HasForeignKey(i => i.UniversityId);
+            builder.Property(u => u.Name).IsRequired();
         }
 
         void InstituteConfigure(EntityTypeBuilder<Institute> builder)
         {
             builder.HasKey(i => i.Id);
             builder.HasMany(i => i.Faculties).WithOne(f => f.Institute).HasForeignKey(f => f.InstituteId);
+            builder.Property(i => i.Name).IsRequired();
         }
 
         void FacultyConfigure(EntityTypeBuilder<Faculty> builder)
         {
             builder.HasKey(f => f.Id);
             builder.HasMany(f => f.Kafedras).WithOne(k => k.Faculty).HasForeignKey(k => k.FacultyId);
+            builder.Property(f => f.Name).IsRequired();
         }
 
         void KafedraConfigure(EntityTypeBuilder<Kafedra> builder)
@@ -63,23 +66,30 @@ namespace UniversityT.Model
             builder.HasKey(k => k.Id);
             builder.HasMany(k => k.Groups).WithOne(g => g.Kafedra).HasForeignKey(g => g.KafedraId);
             builder.HasMany(k => k.Teachers).WithOne(t => t.Kafedra).HasForeignKey(t => t.KafedraId);
+            builder.Property(k => k.Name).IsRequired();
         }
 
         void GroupConfigure(EntityTypeBuilder<Group> builder)
         {
             builder.HasKey(g => g.Id);
             builder.HasMany(g => g.Students).WithOne(s => s.Group).HasForeignKey(s => s.GroupId);
+            builder.Property(g => g.Number).IsRequired();
         }
 
         void StudentConfigure(EntityTypeBuilder<Student> builder)
         {
             builder.HasKey(s => s.Id);
+            builder.Property(s => s.FirstName).IsRequired();
+            builder.Property(s => s.LastName).IsRequired();
+            builder.Property(s => s.MiddleName).IsRequired();
         }
 
         void SpecialtyConfigure(EntityTypeBuilder<Specialty> builder)
         {
             builder.HasKey(s => s.Id);
             builder.HasMany(s => s.Students).WithOne(s => s.Specialty).HasForeignKey(s => s.SpecialtyId);
+            builder.Property(s => s.Name).IsRequired();
+            builder.Property(s => s.Number).IsRequired();
         }
         
         void TeacherSubjectConfigure(EntityTypeBuilder<TeacherSubject> builder)

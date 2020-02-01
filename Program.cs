@@ -1,5 +1,6 @@
 ﻿using System;
 using UniversityT.Controller;
+using UniversityT.Model;
 
 namespace UniversityT
 {
@@ -7,8 +8,10 @@ namespace UniversityT
     {
         static void Main(string[] args)
         {
-            Manager manager = new Manager();
-            manager.StartUp();
+            using (var db = new UniversityContext())
+            {
+
+            }
         }
     }
 }
