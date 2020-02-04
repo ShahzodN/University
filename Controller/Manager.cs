@@ -18,7 +18,8 @@ namespace UniversityT.Controller
             {
                 "Университеты","Институты",
                 "Факультеты","Кафедры",
-                "Группы", "Специальности"
+                "Группы", "Специальности",
+                "Поиск"
             };
         }
         public void StartUp()
@@ -48,6 +49,9 @@ namespace UniversityT.Controller
                         break;
                     case 6:
                         ShowSpecialties();
+                        break;
+                    case 7:
+                        SearchStudent();
                         break;
                     default:
                         {
@@ -266,6 +270,36 @@ namespace UniversityT.Controller
                 Console.ResetColor();
             }
             return inputInfo;
+        }
+
+        private void SearchStudent()
+        {
+            using (var db = new UniversityContext())
+            {
+                var info = Console.ReadLine();
+                var students = db.Students
+                    .Include(s => s.Group)
+                    .ThenInclude(g => g.Kafedra)
+                    .Include(s => s.Specialty)
+                    .Where(s => s.FirstName == info || s.LastName == info || s.MiddleName == info)
+                    .ToList();
+                if (students.Count > 0)
+                {
+                    foreach (var stud in students)
+                    {
+                        Console.WriteLine($"{stud.LastName} {stud.FirstName} {stud.MiddleName}");
+                        Console.WriteLine($"\t{stud.Group.Number}\n\t{stud.Group.Kafedra.EncryptedName}" +
+                            $"\n\t{stud.Specialty.Number} {stud.Specialty.Name}");
+                    }
+                }
+                else
+                {
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine("Такой студент не существует");
+                    Console.ResetColor();
+                    SearchStudent();
+                }
+            }
         }
     }
 }
