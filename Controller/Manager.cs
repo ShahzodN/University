@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using UniversityT.Model;
 
 namespace UniversityT.Controller
@@ -10,23 +11,18 @@ namespace UniversityT.Controller
     class Manager
     {
         int inputNumber;
+        string[] options;
         string splitter = "* * * * * * * * * * * * * * * * * * * * * * * * * * *";
         List<string> firstInfos;
         public Manager()
         {
-            firstInfos = new List<string>()
-            {
-                "Университеты","Институты",
-                "Факультеты","Кафедры",
-                "Группы", "Специальности",
-                "Поиск"
-            };
+            Initializer();
         }
         public void StartUp()
         {
             var counter = 1;
             foreach (var item in firstInfos)
-                Console.WriteLine($"{counter++} {item}");
+                Console.WriteLine($"{counter++}. {item}");
             SwitchCaseCheck();
             void SwitchCaseCheck()
             {
@@ -52,6 +48,9 @@ namespace UniversityT.Controller
                         break;
                     case 7:
                         SearchStudent();
+                        break;
+                    case 8:
+                        Options();
                         break;
                     default:
                         {
@@ -260,7 +259,7 @@ namespace UniversityT.Controller
             }
         }
 
-        private int CheckInputNumber()
+        public static int CheckInputNumber()
         {
             int inputInfo;
             while (!int.TryParse(Console.ReadLine(), out inputInfo))
@@ -300,6 +299,42 @@ namespace UniversityT.Controller
                     SearchStudent();
                 }
             }
+        }
+
+        private void Options()
+        {
+            var counter = 1;
+            foreach (var item in options)
+                Console.WriteLine($"{counter++}. {item}");
+            inputNumber = CheckInputNumber();
+            if (inputNumber == 1)
+                new EntityAdd();
+            else if (inputNumber == 2)
+                new EntityDelete();
+            else
+            {
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine("Ошибка");
+                Console.ResetColor();
+                Options();
+            }
+        }
+
+        private void Initializer()
+        {
+            firstInfos = new List<string>()
+            {
+                "Университеты","Институты",
+                "Факультеты","Кафедры",
+                "Группы", "Специальности",
+                "Поиск", "Опции"
+            };
+
+            options = new string[2]
+            {
+                "Добавить",
+                "Удалить"
+            };
         }
     }
 }
